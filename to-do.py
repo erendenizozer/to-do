@@ -1,5 +1,12 @@
 tasks = []
 
+try:
+    with open("tasks.txt", "r") as file:
+        for line in file:
+            tasks.append(line.strip())
+except FileNotFoundError:
+    tasks = []
+
 def menu():
     while True:
         print("\n 1. My List \n 2. Add Task \n 3. Delete Task \n 4. Complete Task \n 5. Quit")
@@ -29,12 +36,11 @@ def menu():
 
                 unwanted_task = input("Enter the Task You Want To Delete: ")
 
-                for x in tasks:
-                    if unwanted_task not in x:
-                        print(f"{unwanted_task} does not exists.")
-                        break
-                    else:
-                        tasks.remove(unwanted_task)
+                if unwanted_task in tasks:
+                    tasks.remove(unwanted_task)
+                    print("Tasks Removed")
+                else:
+                    print(f"Couldn't find a habit name {unwanted_task}")
 
             elif input_num == 4:
                 if len(tasks) == 0:
@@ -53,4 +59,9 @@ def menu():
                 break
         except ValueError:
             print("You need to enter a valid number (1-4).")
+
 menu()
+
+with open("tasks.txt", "w") as file:
+    for task in tasks:
+        file.write(task + "\n")
